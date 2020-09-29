@@ -29,58 +29,33 @@ namespace RealTimeApplication
                 Thread.Sleep(500);
                 await connection.StartAsync();
             };
-
-            Load += new EventHandler(Form1_Load);
         }
 
         private async void Form1_Load(object sender, EventArgs e)
         {
             try
             {
-                //if (connection)
-                //{
-
-                //}
                 var es = connection.State;
                 if (es.ToString() == "Disconnected")
                 {
                     await connection.StartAsync();
                 }
 
-                //var test = HubConnectionState.Connected;
-
+                connection.On<string>("SendUserGrants", (test) =>
+                {
+                    textBox2.Text = test;
+                });
             }
             catch (Exception ex)
             {
-                //messagesList.Items.Add(ex.Message);
                 MessageBox.Show("SignalR not working, " + ex.ToString());
             }
 
-            connection.On<string>("SendUserGrants", (test) =>
-            {
-                textBox1.Text = test;
-            });
         }
-
-
-        private async void button1_Click(object sender, EventArgs e)
+        private async void textBox1_TextChanged(object sender, EventArgs e)
         {
-            UserGrants userGrants = new UserGrants
-            {
-                Modulo = "test",
-                Access = true
-            };
-
-            await connection.InvokeAsync("SendUserGrants", "pasdasdasw");
+            await connection.InvokeAsync("SendUserGrants", textBox1.Text);
         }
 
-        private  void button2_Click(object sender, EventArgs e)
-        {
-
-            connection.On<string>("SendUserGrants", (test) =>
-            {
-                textBox1.Text = test;
-            });
-        }
     }
 }

@@ -21,7 +21,7 @@ namespace RealTimeApplication
         {
             InitializeComponent();
              connection = new HubConnectionBuilder()
-              .WithUrl("http://localhost:55104/TestHub")
+              .WithUrl("http://localhost:5001/TestHub")
               .Build();
 
             connection.Closed += async (error) =>

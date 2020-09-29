@@ -37,6 +37,7 @@ namespace SignalRHost
                 //{
                 //    await context.Response.WriteAsync("Hello World!");
                 //});
+                endpoints.MapHub<ChartHub>("/ChartHub");
                 endpoints.MapHub<TestHub>("/TestHub");
             });
         }

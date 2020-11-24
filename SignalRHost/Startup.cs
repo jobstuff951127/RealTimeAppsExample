@@ -18,7 +18,6 @@ namespace SignalRHost
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSignalR();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,7 +33,6 @@ namespace SignalRHost
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<ChartHub>("/ChartHub");
-                endpoints.MapHub<TestHub>("/TestHub");
             });
         }
     }

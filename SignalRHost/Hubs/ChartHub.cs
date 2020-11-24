@@ -48,8 +48,16 @@ namespace SignalRHost.Hubs
             }
         }
 
+        public void OnDisconnect()
+        {
+            var id = Context.ConnectionId;
 
-
+            if (UserDetail.ConnectedUsers.Count(x => x.ConnectionId == id) == 1)
+            {
+                var obj = UserDetail.ConnectedUsers.FirstOrDefault(x => x.ConnectionId == id);
+                UserDetail.ConnectedUsers.Remove(obj);
+            }
+        }
     }
 }
 

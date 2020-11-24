@@ -25,9 +25,19 @@ namespace RealTimeFormNet
         public Form1()
         {
             InitializeComponent();
+            //Targets signalR endpoint
             connection = new HubConnectionBuilder()
              .WithUrl("http://localhost:5001/ChartHub")
              .Build();
+            //Every time signalR connection gets closed this section gonna try to connect every 3 secs
+            connection.Closed += async (error) =>
+            {
+                Thread.Sleep(3000);
+                await connection.StartAsync();
+            };
+            //Opens up the connection if its disconnected
+            if (connection.State == HubConnectionState.Disconnected)
+                connection.StartAsync().GetAwaiter();
         }
 
         private async void button1_Click(object sender, EventArgs e)
@@ -52,13 +62,10 @@ namespace RealTimeFormNet
             await connection.InvokeAsync("SendUserCharts", productName, CantProduct);
         }
 
-        private async void Form1_Load(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
         {
             try
             {
-                if(connection.State == HubConnectionState.Disconnected)
-                    await connection.StartAsync();
-
                 connection.On<ArrayList, ArrayList>("SendUserCharts", (test, test1) =>
                 {
                     productName.Clear();

@@ -15,7 +15,7 @@ namespace RealTimePOS
     public partial class Form1 : Form
     {
         readonly HubConnection connection;
-        int[] ventas = { 9200452, 12981033, 12981033, 12981033, 12981033, 4291825, 4291838, 4372147, 4372166, 4372383 };
+        private readonly int[] ventas = { 9200452, 12981033, 12981033, 12981033, 12981033, 4291825, 4291838, 4372147, 4372166, 4372383 };
         Random random = new Random();
         public Form1()
         {
@@ -55,6 +55,12 @@ namespace RealTimePOS
                 else
                     pictureBox1.Image = Properties.Resources.error;
             });
+        }
+
+        private async void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            await connection.InvokeAsync("OnDisconnect");
+            await connection.StopAsync();
         }
     }
 }

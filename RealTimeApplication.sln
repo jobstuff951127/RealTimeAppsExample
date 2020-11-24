@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SignalRHost", "SignalRHost\SignalRHost.csproj", "{86600B62-FC39-4B91-9C66-C9DDCBAB6FAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealTimeCharting", "RealTimeFormNet\RealTimeCharting.csproj", "{11B8A553-A9B5-48A1-B9FF-CF01D4DF7AED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealTimeCharting", "RealTimeCharting\RealTimeCharting.csproj", "{11B8A553-A9B5-48A1-B9FF-CF01D4DF7AED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealTimeOneToOne", "RealTimePOS\RealTimeOneToOne.csproj", "{9A9D1E98-8789-40BF-B813-895F7D315C95}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealTimeOneToOne", "RealTimeOneToOne\RealTimeOneToOne.csproj", "{9A9D1E98-8789-40BF-B813-895F7D315C95}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

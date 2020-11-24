@@ -28,12 +28,6 @@ namespace RealTimeFormNet
             connection = new HubConnectionBuilder()
              .WithUrl("http://localhost:5001/ChartHub")
              .Build();
-
-            connection.Closed += async (error) =>
-            {
-                Thread.Sleep(500);
-                await connection.StartAsync();
-            };
         }
 
         private async void button1_Click(object sender, EventArgs e)
@@ -62,11 +56,8 @@ namespace RealTimeFormNet
         {
             try
             {
-                var es = connection.State;
-                if (es.ToString() == "Disconnected")
-                {
+                if(connection.State == HubConnectionState.Disconnected)
                     await connection.StartAsync();
-                }
 
                 connection.On<ArrayList, ArrayList>("SendUserCharts", (test, test1) =>
                 {

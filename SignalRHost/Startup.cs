@@ -33,10 +33,6 @@ namespace SignalRHost
 
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapGet("/", async context =>
-                //{
-                //    await context.Response.WriteAsync("Hello World!");
-                //});
                 endpoints.MapHub<ChartHub>("/ChartHub");
                 endpoints.MapHub<TestHub>("/TestHub");
             });

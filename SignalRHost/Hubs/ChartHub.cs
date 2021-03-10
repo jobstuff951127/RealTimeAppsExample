@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,53 +8,66 @@ namespace SignalRHost.Hubs
 {
     public class ChartHub : Hub
     {
+        //The caller is the one who send data through the SignalR method 
+        //The receiver is the one whos listening the SignalR method
         public async Task SendUserCharts(ArrayList test, ArrayList test1)
         {
             //This line send the response to everyone but the caller
             await Clients.Others.SendAsync("SendUserCharts", test, test1);
         }
 
-        public async Task Done(bool done, int id) 
+        public async Task Done(bool done, int id)
         {
-            //Get SignalR id from the caller
-            string fromUserId = Context.ConnectionId;
-            //Get the SignalR id from the client that has the same business id but different signalR id that the actual caller
-            var toUser = UserDetail.ConnectedUsers.FirstOrDefault(x => x.UserName == id && x.ConnectionId != fromUserId);
+            try
+            {
+                //Get SignalR id from the caller
+                string fromUserId = Context.ConnectionId;
+                //Get the SignalR id from the client/receiver that has the same business id but different signalR id that the actual caller
+                var toUser = Transaction.ConnectedClients.FirstOrDefault(x => x.BusinessId == id && x.ConnectionId != fromUserId);
 
-            //Send to a specific client the response from the caller
-            if(toUser != null)
-                await Clients.Client(toUser.ConnectionId).SendAsync("Done", done, id);
-    
-            //Junk that maybe useful
-            //var caller = Clients.Caller.SendAsync("Done", , done); // Others.SendAsync("Done", id, done);
+                //Send to a specific client/receiver the message from the caller
+                if (toUser != null)
+                    await Clients.Client(toUser.ConnectionId).SendAsync("Done", done, id);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
-        public void Connect(int userName)
+        public void Connect(int BusinessId)
         {
             //Get SignalR id from the caller
             var id = Context.ConnectionId;
 
-            //If client is not registered already          
-            if (UserDetail.ConnectedUsers.Count(x => x.ConnectionId == id) == 0)
+            //If client/receiver is not registered already          
+            if (Transaction.ConnectedClients.Count(x => x.ConnectionId == id) == 0)
             {
                 //This lines register SignalR native connection id and the business id while binding them to track caller and reciever
-                UserDetail.ConnectedUsers.Add(new UserDetail { ConnectionId = id, UserName = userName });
-
-                //Junk that maybe useful
-                //// send to caller
-                //Clients.Caller.SendAsync("Connect", id, userName, UserDetail.ConnectedUsers);
-                //// send to all except caller client
-                //Clients.AllExcept(id).onNewUserConnected(id, userName);
+                Transaction.ConnectedClients.Add(new Transaction
+                {
+                    ConnectionId = id,
+                    BusinessId = BusinessId
+                });
             }
         }
 
-        public void OnDisconnect()
+        public void UnSubscribe()
         {
-            var id = Context.ConnectionId;
-
-            if (UserDetail.ConnectedUsers.Count(x => x.ConnectionId == id) == 1)
+            try
             {
-                var obj = UserDetail.ConnectedUsers.FirstOrDefault(x => x.ConnectionId == id);
-                UserDetail.ConnectedUsers.Remove(obj);
+                var id = Context.ConnectionId;
+
+                if (Transaction.ConnectedClients.Count(x => x.ConnectionId == id) == 1)
+                {
+                    var obj = Transaction.ConnectedClients.FirstOrDefault(x => x.ConnectionId == id);
+                    Transaction.ConnectedClients.Remove(obj);
+                    Context.Abort();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
             }
         }
     }

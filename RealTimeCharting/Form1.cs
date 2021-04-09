@@ -27,7 +27,7 @@ namespace RealTimeFormNet
             InitializeComponent();
             //Targets signalR endpoint
             connection = new HubConnectionBuilder()
-             .WithUrl("http://CA214063:5001/ChartHub")
+             .WithUrl("http://CA214063:5001/TotalPOSHub")
              .Build();
             //Every time signalR connection gets closed this section gonna try to connect every 3 secs
             connection.Closed += async (error) =>
@@ -36,8 +36,8 @@ namespace RealTimeFormNet
                 await connection.StartAsync();
             };
             //Opens up the connection if its disconnected
-            if (connection.State == HubConnectionState.Disconnected)
-                connection.StartAsync().GetAwaiter();
+            //if (connection.State == HubConnectionState.Disconnected)
+            //    connection.StartAsync().GetAwaiter();
         }
 
         private async void button1_Click(object sender, EventArgs e)
@@ -73,17 +73,14 @@ namespace RealTimeFormNet
                     productName.Clear();
                     CantProduct.Clear();
 
-                    foreach (var item in test)
-                    {
-                        var s = item.ToString();
-                        productName.Add(s);
-                    }
+                    //test.OfType<ArrayList>().ToList().ForEach(o => productName.Add(o.ToString()));
 
-                    foreach (var item in test1)
-                    {
-                        var s = Convert.ToInt32(item.ToString());
-                        CantProduct.Add(s);
-                    }
+                    //test1.OfType<ArrayList>().ToList().ForEach(o => CantProduct.Add(Convert.ToInt32(o.ToString())));
+
+                    foreach (var item in test) productName.Add(item.ToString());
+
+                    foreach (var item in test1) CantProduct.Add(Convert.ToInt32(item.ToString()));
+
                     chart1.Series[0].Points.DataBindXY(productName, CantProduct);
                 });
             }

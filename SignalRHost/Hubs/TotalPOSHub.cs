@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SignalRHost.Hubs
 {
-    public class ChartHub : Hub
+    public class TotalPOSHub : Hub
     {
         //The caller is the one who send data through the SignalR method 
         //The receiver is the one whos listening the SignalR method
@@ -41,7 +41,7 @@ namespace SignalRHost.Hubs
             var id = Context.ConnectionId;
 
             //If client/receiver is not registered already          
-            if (Transaction.ConnectedClients.Count(x => x.ConnectionId == id) == 0)
+            if (!Transaction.ConnectedClients.Any(x => x.ConnectionId == id))
             {
                 //This lines register SignalR native connection id and the business id while binding them to track caller and reciever
                 Transaction.ConnectedClients.Add(new Transaction
@@ -58,12 +58,13 @@ namespace SignalRHost.Hubs
             {
                 var id = Context.ConnectionId;
 
-                if (Transaction.ConnectedClients.Count(x => x.ConnectionId == id) == 1)
+                if (Transaction.ConnectedClients.Any(c => c.ConnectionId == id))
                 {
-                    var obj = Transaction.ConnectedClients.FirstOrDefault(x => x.ConnectionId == id);
-                    Transaction.ConnectedClients.Remove(obj);
+                    Transaction.ConnectedClients.Remove(Transaction.ConnectedClients.First(c => c.ConnectionId == id));
                     Context.Abort();
                 }
+                //Transaction.ConnectedClients.FindAll(x => x.ConnectionId == id)
+                //    .ForEach(c => Transaction.ConnectedClients.Remove(c));
             }
             catch (Exception ex)
             {

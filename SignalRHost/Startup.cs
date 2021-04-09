@@ -32,7 +32,7 @@ namespace SignalRHost
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<ChartHub>("/ChartHub");
+                endpoints.MapHub<ChartHub>("/TotalPOS");
             });
         }
     }

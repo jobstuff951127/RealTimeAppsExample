@@ -1,14 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using RealTimePOS.Properties;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace RealTimePOS
@@ -16,7 +9,7 @@ namespace RealTimePOS
     public partial class Form1 : Form
     {
         readonly HubConnection connection;
-        private readonly int[] ventas = { 1, 1, 1, 1, 2, 3, 4, 5, 6, 7 };
+        private readonly int[] ventas = { 1, 3, 4, 4, 4, 4, 4, 5, 6, 7 };
         private readonly Random random = new Random();
         public Form1()
         {
@@ -24,7 +17,7 @@ namespace RealTimePOS
 
             //Targets signalR endpoint
             connection = new HubConnectionBuilder()
-             .WithUrl("http://CA214063:5001/ChartHub")
+             .WithUrl("http://CA214063:5001/TotalPOSHub")
              .Build();
             //Every time signalR connection gets closed this section gonna try to connect every 3 secs
             connection.Closed += async (error) =>
@@ -33,8 +26,8 @@ namespace RealTimePOS
                 await connection.StartAsync();
             };
             //Opens up the connection if its disconnected
-            if (connection.State == HubConnectionState.Disconnected)
-                connection.StartAsync().GetAwaiter();
+            //if (connection.State == HubConnectionState.Disconnected)
+            //    connection.StartAsync().GetAwaiter();
         }
 
         private async void Form1_Load(object sender, EventArgs e)

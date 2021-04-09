@@ -6,6 +6,6 @@ Once the exe is running open many exe´s as you can and press the button at the 
 To run the RealTimeOnetoOne project is the same process described above but this last one needs another client app that uses the "Done" method and share the same business id randomly assigned.
 
 **Example:**
-connection.InvokeAsync("Done", <<bool>>, <<int>>);
+connection.InvokeAsync("Done", false, 12);
 
 

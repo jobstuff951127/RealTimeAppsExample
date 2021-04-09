@@ -8,4 +8,8 @@ To run the RealTimeOnetoOne project is the same process described above but this
 **Example:**
 connection.InvokeAsync("Done", false, 12);
 
+**Note:**
+
+The "applicationUrl" field must be edited in (SignalRHost section) launchSettings.json file along with each client app that targets the same url.
+
 

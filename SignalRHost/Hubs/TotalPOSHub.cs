@@ -28,7 +28,6 @@ namespace SignalRHost.Hubs
                 //Send to a specific client/receiver the message from the caller
                 if (toUser != null)
                     await Clients.Client(toUser.ConnectionId).SendAsync("Done", done, id);
-
             }
             catch (Exception ex)
             {
